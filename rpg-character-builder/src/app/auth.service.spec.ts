@@ -24,14 +24,14 @@ describe('AuthService', () => {
   });
 
   it('should set cookie and authState to true on successful signin', () => {
-    const result = service.signin('wizardlywand@hogwarts.com', 'Alohomora123');
+    const result = service.signin('Conan@barbarians.com', 'Ragnarok123');
     expect(result).toBeTrue();
     expect(service.getAuthState().subscribe(state => expect(state).toBeTrue()));
     expect(cookieServiceSpy.set.calls.count()).toBe(1);
   });
 
   it('should not set cookie and authState to true on unsuccessful signin', () => {
-    const result = service.signin('wrongemail@hogwarts.com', 'wrongpassword');
+    const result = service.signin('wrongemail@barbarians.com', 'wrongpassword');
     expect(result).toBeFalse();
     expect(service.getAuthState().subscribe(state => expect(state).toBeFalse()));
     expect(cookieServiceSpy.set.calls.count()).toBe(0);

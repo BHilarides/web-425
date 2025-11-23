@@ -22,11 +22,9 @@ export class AuthService {
 
   constructor(private cookieService: CookieService, private router: Router) {
     this.users = [
-      { empId: 1007, email: 'wizardlywand@hogwarts.com', password: 'Alohomora123' },
-      { empId: 1008, email: 'quidditchqueen@hogwarts.com', password: 'Quazle22' },
-      { empId: 1009, email: 'potionmaster@hogwarts.com', password: 'Polyjuice99' },
-      { empId: 1010, email: 'mugglemania@hogwarts.com', password: 'Dementor0' },
-      { empId: 1011, email: 'spellbinder@hogwarts.com', password: 'Expelliarmus88' }
+      { empId: 1001, email: 'Conan@barbarians.com', password: 'Ragnarok123' },
+      {empId: 1002, email: 'Valeria@barbarians.com', password: 'SwordMaiden45' },
+      {empId: 1003, email: 'Zula@barbarians.com', password: 'AxePower78' }
     ];
   }
 
@@ -37,7 +35,7 @@ export class AuthService {
   signin(email: string, password: string) {
     const user = this.users.find(user => user.email === email && user.password === password);
 
-    if (user) {
+    if(user) {
       this.cookieService.set('session_user', email, 1);
       this.authState.next(true);
       return true;

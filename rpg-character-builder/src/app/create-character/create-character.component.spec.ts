@@ -22,10 +22,10 @@ describe('CreateCharacterComponent', () => {
   });
 
   it('should generate a random character ID between 1 and 1000 with no decimal places', () => {
-    const generateId = component.newCharacterId(); // This will trigger the generation of a new character ID
-    expect(component.newCharacterId).toBeGreaterThan(0);
-    expect(component.newCharacterId).toBeLessThanOrEqual(1000);
-    expect(Number.isInteger(component.newCharacterId)).toBe(true);
+    const characterId = component.newCharacterId(); // This will trigger the generation of a new character ID
+    expect(characterId).toBeGreaterThan(0);
+    expect(characterId).toBeLessThanOrEqual(1000);
+    expect(Number.isInteger(characterId)).toBe(true);
   });
 
   it('should add a character with correct customization', () => {

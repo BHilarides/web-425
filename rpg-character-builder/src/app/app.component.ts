@@ -1,15 +1,31 @@
-import { Component } from '@angular/core';
-import { RouterLink, RouterOutlet } from '@angular/router';
+import { Component, OnInit } from '@angular/core';
+
+import { Router, RouterLink, RouterOutlet } from '@angular/router';
+
+import { CookieService } from 'ngx-cookie-service';
+
+import { AuthService } from './auth.service';
+
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet, RouterLink],
+  imports: [RouterOutlet, RouterLink, CommonModule],
   template: `
     <div class="wrapper">
       <header class="banner">
         <img src="/assets/RPG-banner.png" alt="website banner for RPG Character Builder" class="banner-img">
       </header>
+
+      <div class="sign-in-container">
+        @if (email) {
+          <p>Welcome, {{ email }} !</p>
+          <button (click)="signout()">Sign Out</button>
+        } @else {
+          <a routerLink="/signin" class="sign-in-link">Sign In</a>
+        }
+      </div>
 
       <main class="main-content">
 
@@ -45,6 +61,27 @@ import { RouterLink, RouterOutlet } from '@angular/router';
   styles: [`
   `]
 })
-export class AppComponent {
-  title = 'rpg-character-builder';
+export class AppComponent implements OnInit{
+  email?: string;
+
+  constructor(
+    private authService: AuthService,
+    private cookieService: CookieService,
+    private router: Router
+  ) {}
+
+  ngOnInit() {
+    this.authService.getAuthState().subscribe((isAuth) => {
+      if (isAuth) {
+        this.email = this.cookieService.get('session_user');
+      } else {
+        this.email = undefined;
+      }
+    });
+  }
+
+  signout() {
+    this.email = undefined;
+    this.authService.signout();
+  }
 }

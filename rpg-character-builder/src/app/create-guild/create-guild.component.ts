@@ -10,7 +10,7 @@ import { FormBuilder, FormGroup, Validators, FormArray, ReactiveFormsModule } fr
   imports: [ReactiveFormsModule, CommonModule],
   template: `
     <div class="create-guild-container">
-      <form [formGroup]="guildForm" class="create-guild-form" (ngSubmit)="createGuild(); guildForm.reset();">
+      <form [formGroup]="guildForm" class="create-guild-form" (ngSubmit)="createGuild()">
 
       <h1>Create a New Guild</h1>
         <fieldset>
@@ -40,7 +40,7 @@ import { FormBuilder, FormGroup, Validators, FormArray, ReactiveFormsModule } fr
             }
           </div>
 
-          <input type="submit" [disabled]="!guildForm.valid" value="Create Guild">
+          <input type="submit" [disabled]="!guildForm.valid || !hasSelectedNotification()" value="Create Guild">
         </fieldset>
       </form>
 
@@ -211,6 +211,12 @@ export class CreateGuildComponent {
     ];
   }
 
+      // Double check notification
+    hasSelectedNotification(): boolean {
+      const vals: boolean[] = this.notificationPreferencesArray.value;
+      return vals.some(v => v === true);
+    }
+
   createGuild() {
 
     //Get the boolean values for each checkbox from the Form Array
@@ -228,5 +234,14 @@ export class CreateGuildComponent {
     console.log('New Guild Created:', newGuild);
     this.preexistingGuilds.push(newGuild);
     alert("Guild created successfully!")
+
+    this.guildForm.reset({
+      guildName: '',
+      description: '',
+      type: null,
+      acceptTerms: false
+    });
+
+    this.notificationPreferencesArray.controls.forEach(ctrl => ctrl.setValue(false));
   }
 }

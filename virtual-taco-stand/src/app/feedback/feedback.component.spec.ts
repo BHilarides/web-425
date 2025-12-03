@@ -27,7 +27,7 @@ describe('FeedbackComponent', () => {
 
   it('form should be invalid when empty', () => {
     expect(component.feedbackForm.valid).toBeFalsy();
-  })
+  });
 
   it('form should be valid when filled correctly', () => {
     component.feedbackForm.controls['rating'].setValue(5);

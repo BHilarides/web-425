@@ -17,18 +17,14 @@ import { FormBuilder, FormGroup, Validators, FormArray, ReactiveFormsModule } fr
           <legend>Guild Creation Form</legend>
 
           <label>Guild Name</label>
-          @for(guildName of guildNames; track guildName) {
-            <input type="text" [value]="guildName" formControlName="guildName"> {{ guildName }} <br />
-          }
+          <input type="text" formControlName="guildName">
 
           <label>Description</label>
-          @for(description of descriptions; track description) {
-            <textarea rows="5" [value]="description" formControlName="description"></textarea>
-          }
+          <textarea rows="5" formControlName="description"></textarea>
 
           <label>Guild Type</label>
           <select formControlName="type">
-            @for(option of guildTypeOptions; track option) {
+            @for(option of typeOptions; track option) {
               <option [value]="option">{{ option }}</option>
             }
           </select>
@@ -57,10 +53,13 @@ import { FormBuilder, FormGroup, Validators, FormArray, ReactiveFormsModule } fr
               <h3>Description:</h3>
               <p>{{ guild.description }}</p>
               <h3>Type:</h3>
-              <ul class="type-list">
-                @for(type of guild.type; track type) {
-                  <li>{{ type }}</li>
+              <p>{{ guild.type }}</p>
+              <h3>Notification Preference:</h3>
+              <ul>
+                @for(pref of guild.notificationPreferences; track pref) {
+                <li>{{ pref }}</li>
                 }
+              </ul>
             </div>
           }
         </div>
@@ -98,9 +97,136 @@ import { FormBuilder, FormGroup, Validators, FormArray, ReactiveFormsModule } fr
       box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
     }
 
+    label {
+      display: block;
+      margin-bottom: 5px;
+    }
 
+    label:first-of-type {
+      margin-top: 0;
+    }
+
+    label:not(:first-of-type) {
+      margin-top: 10px;
+    }
+
+    input[type="text"] {
+      width: 100%;
+      display: block;
+      margin-bottom: 5px;
+      padding: 8px;
+      box-sizing: border-box;
+    }
+
+    select {
+      width: 20%;
+      display: block;
+      margin-bottom: 5px;
+      padding: 8px;
+      box-sizing: border-box;
+    }
+
+    textarea {
+      width: 100%;
+      margin-bottom: 5px;
+      padding: 8px;
+      box-sizing: border-box;
+    }
+
+    input[type="submit"] {
+      display: block;
+      padding: 8px;
+      margin-bottom: 10px;
+      box-sizing: border-box;
+      float: right;
+    }
+
+    input[type="checkbox"], input[type="radio"] {
+      box-sizing: border-box;
+      margin-bottom: 10px;
+    }
+
+    fieldset {
+      margin-bottom: 20px;
+    }
   `
 })
 export class CreateGuildComponent {
+  typeOptions: string[] = ['Casual', 'Competitive', 'Social', 'Educational'];
+  notificationPreferences: string[] = ['Email', 'SMS', 'In-App', 'None'];
+  preexistingGuilds: any;
 
+  guildForm: FormGroup = this.fb.group({
+    guildName: ['', Validators.compose([Validators.required])],
+    description: ['', Validators.compose([Validators.required])],
+    type: [null, Validators.compose([Validators.required])],
+    acceptTerms: [false, Validators.compose([Validators.requiredTrue])],
+    notificationPreferences: this.fb.array(this.notificationPreferences.map(() => false))
+  })
+
+  get notificationPreferencesArray() {
+    return this.guildForm.get('notificationPreferences') as FormArray;
+  }
+
+  constructor(private fb: FormBuilder) {
+    this.preexistingGuilds = [
+      {
+        guildName: 'The Roving Bandits',
+        description: 'Just a couple of friends having fun.',
+        typeOptions: 'Casual',
+        notificationPreference: ['Email']
+      },
+      {
+        guildName: 'The Destroyers',
+        description: 'We are hardcore. Take no Prisoners!',
+        typeOptions: 'Competitive',
+        notificationPreference: ['SMS']
+      },
+      {
+        guildName: 'Princess Tea Party',
+        description: 'This is our gossip time when the boys are gaming',
+        typeOptions: 'Social',
+        notificationPreference: ['In-App']
+      },
+      {
+        guildName: 'Nerds with Weapons',
+        description: 'This is fun and also social research for a project',
+        typeOptions: 'Educational',
+        notificationPreference: ['Email']
+      },
+      {
+        guildName: 'Destroyers II',
+        description: 'We split off from the Destroyers to form our own guild with no rules',
+        typeOptions: 'Competitive',
+        notificationPreference: ['SMS']
+
+      },
+      {
+        guildName: 'Single Dads',
+        description: 'We are a group of single dads looking to blow off steam',
+        typeOptions: 'Casual',
+        notificationPreference: ['None']
+
+      }
+    ];
+  }
+
+  createGuild() {
+
+    //Get the boolean values for each checkbox from the Form Array
+    const selectedPreferencesValues = this.notificationPreferencesArray.value;
+
+    const selectedPreferences = this.notificationPreferences.map((preference, index) => selectedPreferencesValues[index] ? preference : null).filter(preference => preference !== null)
+
+    const newGuild = {
+      guildName: this.guildForm.value.guildName,
+      description: this.guildForm.value.description,
+      type: this.guildForm.value.type,
+      notificationPreferences: selectedPreferences
+    };
+
+    console.log('New Guild Created:', newGuild);
+    this.preexistingGuilds.push(newGuild);
+    alert("Guild created successfully!")
+  }
 }

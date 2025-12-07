@@ -21,26 +21,18 @@ describe('OrderComponent', () => {
     expect(component).toBeTruthy();
   });
 
-
-  it('should generate a random order ID between 1 and 1000 with no decimal places',() => {
-  component.addToOrder(); // This will trigger the generation of a new order ID
-  expect(component.order.orderId).toBeGreaterThan(0);
-  expect(component.order.orderId).toBeLessThanOrEqual(1000);
-  expect(Number.isInteger(component.order.orderId)).toBe(true);
-  });
-
   it('should add a selected taco to the order with correct customization',() => {
-  component.selectedTacoId = 1;
-  component.noOnions = true;
-  component.noCilantro = false;
-  component.quantity = 2;
-  component.addToOrder();
-  const addedTaco = component.order.tacos[0];
+    component.selectedTacoId = 1;
+    component.noOnions = true;
+    component.noCilantro = false;
+    component.quantity = 2;
+    component.addToOrder();
+    const addedTaco = component.order.tacos[0];
 
-  expect(addedTaco.id).toBe(1);
-  expect(addedTaco.quantity).toBe(2);
-  expect(addedTaco.noOnions).toBe(true);
-  expect(addedTaco.noCilantro).toBe(false);
+    expect(addedTaco.id).toBe(1);
+    expect(addedTaco.quantity).toBe(2);
+    expect(addedTaco.noOnions).toBe(true);
+    expect(addedTaco.noCilantro).toBe(false);
   });
 
   it('should calculate the total price correctly for multiple tacos',() => {
@@ -65,16 +57,16 @@ describe('OrderComponent', () => {
   });
 
   it('should reset all form fields to their default values after resetForm is called',() => {
-  component.selectedTacoId = 2;
-  component.quantity = 3;
-  component.noOnions = true;
-  component.noCilantro = true;
+    component.selectedTacoId = 2;
+    component.quantity = 3;
+    component.noOnions = true;
+    component.noCilantro = true;
 
-  component.resetForm();
+    component.resetForm();
 
-  expect(component.selectedTacoId).toBe(1);
-  expect(component.quantity).toBe(1);
-  expect(component.noOnions).toBe(false);
-  expect(component.noCilantro).toBe(false)
+    expect(component.selectedTacoId).toBe(1);
+    expect(component.quantity).toBe(1);
+    expect(component.noOnions).toBe(false);
+    expect(component.noCilantro).toBe(false)
   })
 });

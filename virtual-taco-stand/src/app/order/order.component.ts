@@ -128,7 +128,8 @@ import { OrderSummaryComponent } from '../order-summary/order-summary.component'
     }
     */
     `
-  ]
+  ],
+  imports: [FormsModule, CommonModule, OrderSummaryComponent]
 })
 export class OrderComponent {
   tacos: Taco[];

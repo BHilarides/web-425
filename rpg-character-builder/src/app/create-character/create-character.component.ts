@@ -41,20 +41,6 @@ import { CommonModule } from '@angular/common'
       </fieldset>
     </form>
 
-    <div class="character-summary">
-      <h1>Your Character</h1>
-
-      @if(character.name !== '') {
-        <div class="character-card">
-          <p><strong>Name:</strong> {{ character.name }}</p>
-          <p><strong>Gender:</strong> {{ character.gender }}</p>
-          <p><strong>Class:</strong> {{ character.class }}</p>
-          <p><strong>Character ID:</strong> {{ character.id }}</p>
-        </div>
-      } @else {
-          <p>No character created yet.</p>
-      }
-    </div>
   </div>
 `,
 styles: [`

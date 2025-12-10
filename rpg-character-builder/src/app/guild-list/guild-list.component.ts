@@ -13,7 +13,7 @@ import { Guild } from '../create-guild/create-guild.component';
 
       @if(guilds.length > 0) {
         <div class="guild-container">
-          @for(guild of preexistingGuilds; track guild) {
+          @for(guild of guilds; track guild) {
             <div class="guild-card">
               <h2>Guild Name: {{ guild.guildName }}</h2>
               <h3>Description:</h3>
@@ -29,7 +29,7 @@ import { Guild } from '../create-guild/create-guild.component';
             </div>
           }
         </div>
-  } else {
+  } @else {
     <p>No Guilds created yet.</p>
   }
   `,

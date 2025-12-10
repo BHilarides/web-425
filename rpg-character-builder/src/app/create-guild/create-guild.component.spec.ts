@@ -34,8 +34,12 @@ describe('CreateGuildComponent', () => {
     component.guildForm.controls['description'].setValue('This is a test guild.');
     component.guildForm.controls['type'].setValue('Casual');
     component.guildForm.controls['acceptTerms'].setValue(true);
-    component.guildForm.controls['notificationPreference'].setValue('None');
+    component.notificationPreferencesArray.at(0).setValue(true);
+
+    fixture.detectChanges();
+
     expect(component.guildForm.valid).toBeTruthy();
+    expect(component.hasSelectedNotification()).toBeTruthy();
   });
 
   it('should call createGuild on form submit with valid data', () => {
@@ -45,12 +49,35 @@ describe('CreateGuildComponent', () => {
     component.guildForm.controls['description'].setValue('This is a test guild.');
     component.guildForm.controls['type'].setValue('Casual');
     component.guildForm.controls['acceptTerms'].setValue(true);
-    component.guildForm.controls['notificationPreference'].setValue('None');
+    component.notificationPreferencesArray.at(0).setValue(true);
+
     fixture.detectChanges();
 
     const form = fixture.debugElement.query(By.css('form'));
     form.triggerEventHandler('ngSubmit', null);
 
     expect(component.createGuild).toHaveBeenCalled();
+  });
+
+  it('should emit guildUpdated event when guild is created', () => {
+    spyOn(component.guildUpdated, 'emit');
+
+    component.guildForm.controls['guildName'].setValue('Event Test Guild');
+    component.guildForm.controls['description'].setValue('Testing events.');
+    component.guildForm.controls['type'].setValue('Social');
+    component.guildForm.controls['acceptTerms'].setValue(true);
+    component.notificationPreferencesArray.at(2).setValue(true); // In-App
+
+    component.createGuild();
+
+    expect(component.guildUpdated.emit).toHaveBeenCalled();
+    expect(component.guildUpdated.emit).toHaveBeenCalledWith(
+      jasmine.objectContaining({
+        guildName: 'Event Test Guild',
+        description: 'Testing events.',
+        type: 'Social',
+        notificationPreferences: ['In-App']
+      })
+    );
   });
 });

@@ -36,9 +36,9 @@ describe('CreateCharacterComponent', () => {
     component.createCharacter();
 
     const createdCharacter = component.character;
-    expect(createdCharacter.name).toBe('Forcynthia')
-    expect(createdCharacter.gender).toBe('female')
-    expect(createdCharacter.class).toBe('rogue')
+    expect(createdCharacter.characterName).toBe('Forcynthia');
+    expect(createdCharacter.characterGender).toBe('female');
+    expect(createdCharacter.characterClass).toBe('rogue');
   });
 
   it('should reset all form fields to their default values after resetForm is called', () => {
@@ -51,5 +51,18 @@ describe('CreateCharacterComponent', () => {
     expect(component.characterName).toBe('');
     expect(component.characterGender).toBe('Male');
     expect(component.characterClass).toBe('Warrior');
-  })
+  });
+
+  // Verify output emitter
+  it('should emit characterUpdated event when character is created', () => {
+    spyOn(component.characterUpdated, 'emit');
+
+    component.characterName = 'Legolas';
+    component.characterGender = 'Male';
+    component.characterClass = 'Rogue';
+
+    component.createCharacter();
+
+    expect(component.characterUpdated).toHaveBeenCalled();
+  });
 });

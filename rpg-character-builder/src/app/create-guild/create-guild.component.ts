@@ -1,13 +1,22 @@
+export interface Guild {
+  guildName: string;
+  description: string;
+  type: string;
+  notificationPreferences: string[];
+}
+
 import { CommonModule } from '@angular/common';
 
-import { Component } from '@angular/core';
+import { Component, EventEmitter, Output } from '@angular/core';
 
 import { FormBuilder, FormGroup, Validators, FormArray, ReactiveFormsModule } from '@angular/forms';
+
+import { GuildListComponent } from '../guild-list/guild-list.component'
 
 @Component({
   selector: 'app-create-guild',
   standalone: true,
-  imports: [ReactiveFormsModule, CommonModule],
+  imports: [ReactiveFormsModule, CommonModule, GuildListComponent],
   template: `
     <div class="create-guild-container">
       <form [formGroup]="guildForm" class="create-guild-form" (ngSubmit)="createGuild()">
@@ -44,25 +53,8 @@ import { FormBuilder, FormGroup, Validators, FormArray, ReactiveFormsModule } fr
         </fieldset>
       </form>
 
-      <div class="created-guilds">
-        <h1>Created Guilds</h1>
-        <div class="guild-container">
-          @for(guild of preexistingGuilds; track guild) {
-            <div class="guild-card">
-              <h2>Guild Name: {{ guild.guildName }}</h2>
-              <h3>Description:</h3>
-              <p>{{ guild.description }}</p>
-              <h3>Type:</h3>
-              <p>{{ guild.type }}</p>
-              <h3>Notification Preference:</h3>
-              <ul>
-                @for(pref of guild.notificationPreferences; track pref) {
-                <li>{{ pref }}</li>
-                }
-              </ul>
-            </div>
-          }
-        </div>
+      <div class="guild-list-section">
+        <app-guild-list [guilds]="preexistingGuilds"></app-guild-list>
       </div>
     </div>
   `,
@@ -74,27 +66,9 @@ import { FormBuilder, FormGroup, Validators, FormArray, ReactiveFormsModule } fr
       align-items: center;
     }
 
-    .create-guild-form, .created-guilds {
+    .create-guild-form, .guild-list-section {
       width: 100%;
       margin-bottom: 20px;
-    }
-
-    .guild-container {
-      display: flex;
-      flex-direction: row;
-      flex-wrap: wrap;
-      justify-content: space-between;
-      gap: 20px;
-    }
-
-    .guild-card {
-      flex: 0 0 calc(33% - 20px);
-      box-sizing: border-box;
-      border: 1px solid #ccc;
-      border-radius: 5px;
-      padding: 10px;
-      margin: 10px 0;
-      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
     }
 
     label {
@@ -154,7 +128,9 @@ import { FormBuilder, FormGroup, Validators, FormArray, ReactiveFormsModule } fr
 export class CreateGuildComponent {
   typeOptions: string[] = ['Casual', 'Competitive', 'Social', 'Educational'];
   notificationPreferences: string[] = ['Email', 'SMS', 'In-App', 'None'];
-  preexistingGuilds: any;
+  preexistingGuilds: Guild[] = [];
+
+  @Output() guildUpdated = new EventEmitter<Guild>();
 
   guildForm: FormGroup = this.fb.group({
     guildName: ['', Validators.compose([Validators.required])],
@@ -173,40 +149,39 @@ export class CreateGuildComponent {
       {
         guildName: 'The Roving Bandits',
         description: 'Just a couple of friends having fun.',
-        typeOptions: 'Casual',
-        notificationPreference: ['Email']
+        type: 'Casual',
+        notificationPreferences: ['Email']
       },
       {
         guildName: 'The Destroyers',
         description: 'We are hardcore. Take no Prisoners!',
-        typeOptions: 'Competitive',
-        notificationPreference: ['SMS']
+        type: 'Competitive',
+        notificationPreferences: ['SMS']
       },
       {
         guildName: 'Princess Tea Party',
         description: 'This is our gossip time when the boys are gaming',
-        typeOptions: 'Social',
-        notificationPreference: ['In-App']
+        type: 'Social',
+        notificationPreferences: ['In-App']
       },
       {
         guildName: 'Nerds with Weapons',
         description: 'This is fun and also social research for a project',
-        typeOptions: 'Educational',
-        notificationPreference: ['Email']
+        type: 'Educational',
+        notificationPreferences: ['Email']
       },
       {
         guildName: 'Destroyers II',
         description: 'We split off from the Destroyers to form our own guild with no rules',
-        typeOptions: 'Competitive',
-        notificationPreference: ['SMS']
+        type: 'Competitive',
+        notificationPreferences: ['SMS']
 
       },
       {
         guildName: 'Single Dads',
         description: 'We are a group of single dads looking to blow off steam',
-        typeOptions: 'Casual',
-        notificationPreference: ['None']
-
+        type: 'Casual',
+        notificationPreferences: ['None']
       }
     ];
   }
@@ -224,16 +199,17 @@ export class CreateGuildComponent {
 
     const selectedPreferences = this.notificationPreferences.map((preference, index) => selectedPreferencesValues[index] ? preference : null).filter(preference => preference !== null)
 
-    const newGuild = {
+    const newGuild: Guild = {
       guildName: this.guildForm.value.guildName,
       description: this.guildForm.value.description,
       type: this.guildForm.value.type,
-      notificationPreferences: selectedPreferences
+      notificationPreferences: selectedPreferences as string[]
     };
 
     console.log('New Guild Created:', newGuild);
     this.preexistingGuilds.push(newGuild);
-    alert("Guild created successfully!")
+    this.guildUpdated.emit(newGuild);
+    alert("Guild created successfully!");
 
     this.guildForm.reset({
       guildName: '',

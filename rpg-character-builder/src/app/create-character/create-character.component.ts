@@ -1,30 +1,34 @@
 export interface Character {
-  id: number;
-  name: string;
-  gender: string;
-  class: string;
+  characterId: number;
+  characterName: string;
+  characterGender: string;
+  characterClass: string;
 }
 
-import { Component } from '@angular/core';
-import { FormsModule } from '@angular/forms'
+import { Component, EventEmitter, Output } from '@angular/core';
+
+import { FormsModule, NgForm } from '@angular/forms'
+
 import { CommonModule } from '@angular/common'
+
+import { CharacterListComponent } from '../character-list/character-list.component';
 
 @Component({
   selector: 'app-create-character',
   standalone: true,
-  imports: [FormsModule, CommonModule],
   template: `
     <div class="character-form-container">
-      <form class="character-form" #characterForm="ngForm" (ngSubmit)="createCharacter();">
+    <form class="character-form" #characterForm="ngForm" (ngSubmit)="createCharacter();">
       <h1>Create Your Character</h1>
-        <fieldset>
-          <legend>Character Details</legend>
 
-          <label for="characterName">Character Name</label>
-          <input type="text" id="characterName" name="characterName" [(ngModel)]="characterName" ngModel>
+      <fieldset>
+        <legend>Character Details</legend>
 
-          <label for="characterGender">Gender</label>
-          <select name="characterGender" id="characterGender" [(ngModel)]="characterGender" ngModel>
+        <label for="characterName">Character Name</label>
+        <input type="text" id="characterName" name="characterName" [(ngModel)]="characterName" ngModel>
+
+        <label for="characterGender">Gender</label>
+        <select name="characterGender" id="characterGender" [(ngModel)]="characterGender" ngModel>
             <option value="Male">Male</option>
             <option value="Female">Female</option>
             <option value="Other">Other</option>
@@ -41,6 +45,8 @@ import { CommonModule } from '@angular/common'
       </fieldset>
     </form>
 
+    <div class="character-list">
+      <app-character-list [character]="character"></app-character-list>
   </div>
 `,
 styles: [`
@@ -74,7 +80,7 @@ styles: [`
     }
 
     input[type="text"], select {
-      width: 100%
+      width: 100%;
     }
 
     input[type="submit"] {
@@ -90,7 +96,9 @@ styles: [`
     .character-card p {
       margin: 10px 0;
     }
-  `]
+  `
+],
+imports: [FormsModule, CommonModule, CharacterListComponent]
 })
 export class CreateCharacterComponent {
   character: Character;
@@ -98,12 +106,14 @@ export class CreateCharacterComponent {
   characterGender: string;
   characterClass: string;
 
+  @Output() characterUpdated = new EventEmitter<Character>();
+
   constructor() {
     this.character = {
-      id: 0,
-      name: '',
-      gender: '',
-      class: '',
+      characterId: 0,
+      characterName: '',
+      characterGender: '',
+      characterClass: '',
     };
 
     this.characterName = '';
@@ -117,13 +127,14 @@ export class CreateCharacterComponent {
 
   createCharacter() {
     this.character = {
-      id: this.newCharacterId(),
-      name: this.characterName,
-      gender: this.characterGender,
-      class: this.characterClass
+      characterId: this.newCharacterId(),
+      characterName: this.characterName,
+      characterGender: this.characterGender,
+      characterClass: this.characterClass
     };
 
     console.log('Character created:', this.character);
+    this.characterUpdated.emit(this.character);
     this.resetForm();
   }
 

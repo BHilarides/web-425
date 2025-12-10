@@ -20,10 +20,10 @@ describe('CharacterListComponent', () => {
     component = fixture.componentInstance;
 
     const mockCharacter: Character = {
-      id: 999,
-      name: 'Billy the Kid',
-      gender: 'Male',
-      class: 'Sharpshooter'
+      characterId: 999,
+      characterName: 'Billy the Kid',
+      characterGender: 'Male',
+      characterClass: 'Sharpshooter'
     };
 
     component.character = mockCharacter;
@@ -37,10 +37,10 @@ describe('CharacterListComponent', () => {
 
   it('should display character correctly', () => {
     const mockCharacter: Character = {
-      id: 1000,
-      name: 'Grandalf the Grey',
-      gender: 'Male',
-      class: 'Mage'
+      characterId: 1000,
+      characterName: 'Grandalf the Grey',
+      characterGender: 'Male',
+      characterClass: 'Mage'
     };
 
     component.character = mockCharacter;
@@ -55,10 +55,10 @@ describe('CharacterListComponent', () => {
 
   it('should display a message for an empty character', () => {
     const mockCharacter: Character = {
-      id: 1001,
-      name: '',
-      gender: '',
-      class: ''
+      characterId: 1001,
+      characterName: '',
+      characterGender: '',
+      characterClass: ''
     };
 
     component.character = mockCharacter;
@@ -70,10 +70,10 @@ describe('CharacterListComponent', () => {
 
   it('should display the character Id', () => {
     const mockCharacter: Character = {
-      id: 1003,
-      name: 'testCharacter',
-      gender: 'Male',
-      class: 'Warrior'
+      characterId: 1003,
+      characterName: 'testCharacter',
+      characterGender: 'Male',
+      characterClass: 'Warrior'
     };
 
     component.character = mockCharacter;

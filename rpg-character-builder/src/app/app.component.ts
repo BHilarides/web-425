@@ -52,7 +52,7 @@ import { CommonModule } from '@angular/common';
             <a routerLink="/signin">SignIn</a> |
             <a routerLink="/create-character">Create Character</a> |
             <a routerLink="/create-guild">Create Guild</a> |
-            <a routerLink="/character-faction">Character Faction</a>
+            <a routerLink="/character-factions">Character Faction</a>
         </nav>
         <p>&copy; 2025 RPG Character Builder</p>
       </footer>

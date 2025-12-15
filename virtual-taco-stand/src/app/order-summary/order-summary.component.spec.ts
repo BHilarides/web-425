@@ -74,7 +74,7 @@ describe('OrderSummaryComponent', () => {
     fixture.detectChanges();
     const compiled = fixture.nativeElement;
 
-    expect(compiled.querySelector('li').textContent).toContain('2x Carnitas');
-    expect(compiled.querySelector('li').textContent).toContain('Price per taco: $3.00');
+    expect(compiled.querySelector('li').textContent).toContain('2 x Carnitas');
+    expect(compiled.querySelector('li').textContent).toContain('Price per Taco: $3.00');
   });
 });

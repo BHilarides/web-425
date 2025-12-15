@@ -63,6 +63,6 @@ describe('CreateCharacterComponent', () => {
 
     component.createCharacter();
 
-    expect(component.characterUpdated).toHaveBeenCalled();
+    expect(component.characterUpdated.emit).toHaveBeenCalled();
   });
 });

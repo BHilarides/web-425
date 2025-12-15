@@ -41,7 +41,7 @@ export const routes: Routes = [
     component: CreateGuildComponent
   },
   {
-    path: 'character-faction',
+    path: 'character-factions',
     component: CharacterFactionComponent
   }
 ];

@@ -30,7 +30,7 @@ import { Guild } from '../create-guild/create-guild.component';
           }
         </div>
   } @else {
-    <p>No Guilds created yet.</p>
+    <p>No guilds created yet.</p>
   }
   `,
   styles: [`

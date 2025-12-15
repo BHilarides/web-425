@@ -18,15 +18,14 @@ import { Order } from '../order/order.component'
         <br />
           Price per Taco: {{ taco.price | currency:'USD':'symbol':'1.2-2' }}
         <br />
-
-          @if (taco.noOnions) {
-            No onions
-          <br />
-          }
-          @if (taco.noCilantro) {
-            No cilantro
-          <br />
-          }
+        @if (taco.noOnions) {
+          No onions
+        <br />
+        }
+        @if (taco.noCilantro) {
+          No cilantro
+        <br />
+        }
         </li>
       }
     </ul>
